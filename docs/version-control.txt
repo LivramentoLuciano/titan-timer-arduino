@@ -1,0 +1,6 @@
+v7 -> Uso de registros en vez de libreria en Timer, para intentar solucionar diferencias con respecto al temporizado de la app 
+(funcion 'Start' de libreria disparaba interrupcion directo¿? y me desfasaba) y reseteo el contador en las 'pausas'
+porque en la app se resetea y espera 1 segundo entero, no sigue desde 300mseg, por ejemplo 
+(para solucionar esto, quizas cambiar en la app el clock a contador de 1000 interrupciones de 1mseg, en vez de 1 interrupc de 1 seg, 
+porque sigo teniendo problemas de desfase) (OJO, si cambio a mseg, creo que no deberia reiniciar el contador en Arduino durante 'pausas')
+
