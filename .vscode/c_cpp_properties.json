@@ -3,13 +3,20 @@
         {
             "name": "Win32",
             "includePath": [
+                "${workspaceRoot}",
+                "D:\\Arduino\\hardware\\arduino\\avr\\**",
                 "D:\\Arduino\\tools\\**",
-                "D:\\Arduino\\hardware\\arduino\\avr\\**"
+                "D:\\Arduino\\hardware\\tools\\**",
+                "D:\\Arduino\\libraries\\**",
+                "C:\\Users\\livra\\OneDrive\\Documentos\\Arduino\\libraries\\**",
+                "C:\\Users\\livra\\OneDrive\\Documentos\\Arduino\\hardware\\tools\\**"
+                
             ],
             "forcedInclude": [
                 "D:\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
             ],
-            "intelliSenseMode": "msvc-x64"
+            "intelliSenseMode": "msvc-x64",
+            "defines": ["USBCON"]
         }
     ],
     "version": 4
