@@ -23,7 +23,8 @@ private:
     char rounds, sets, actualRound, actualSet;
     RoutineState state;
     RoutineInstance instance;
-    unsigned long int t;
+    int t;
+    const int tInit = 3;
 
 public:
     // constructor -> No lo uso (Ver notas) -> Uso en cambio '.init()'
@@ -58,8 +59,8 @@ public:
     void set_state(RoutineState s) { state = s; };
     RoutineInstance get_instance() { return instance; }
     void set_instance(RoutineInstance i) { instance = i; }
-    unsigned long int get_t() { return t; }
-    void set_t(unsigned long int _t) { t = _t; }
+    int get_t() { return t; }
+    void set_t(int _t) { t = _t; }
 
     //
     void init(int _tWork, int _tRest, int _tRestSets, char _rounds, char _sets); // + state, instance,... ??
@@ -68,7 +69,7 @@ public:
     void setUp();
     void setDown();
 
-    unsigned long int get_tLeft(); // en funcion de t y la duracion de instance -> no necesito que el atributo tLeft exista}
+    int get_tLeft(); // en funcion de t y la duracion de instance -> no necesito que el atributo tLeft exista}
 };
 
 #endif
