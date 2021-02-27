@@ -4,7 +4,7 @@
 #include "src/miTimer/miTimer.h"
 
 Routine routine = Routine();
-Display display = Display();
+extern Display display;
 extern volatile bool newSecond;
 extern volatile int seconds;
 

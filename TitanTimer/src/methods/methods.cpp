@@ -3,6 +3,7 @@
 #include "../definiciones.h"
 #include "../miTimer/miTimer.h"
 
+extern Display display;
 
 void initTitan()
 {
@@ -11,6 +12,7 @@ void initTitan()
 
     Serial.begin(9600);
     configTimer();
+    display.init();
 }
 
 void testLeds()
