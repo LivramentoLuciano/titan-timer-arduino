@@ -1,5 +1,5 @@
-#ifndef miTimer_h
-#define miTimer_h
+#ifndef miTimer_H
+#define miTimer_H
 
 #include <Arduino.h>
 #include "TimerOne.h"

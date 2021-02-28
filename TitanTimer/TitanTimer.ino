@@ -19,7 +19,7 @@ void loop()
     delay(1000);
     // simulo llegada de rutina
     resetAndEnableTimer();
-    routine.init(50, 10, 60, 6, 4);
+    routine.init(8, 4, 12, 2, 2);
     break;
 
   case INIT:
@@ -27,22 +27,28 @@ void loop()
     {
       newSecond = false;
       routine.set_t(seconds);
-      int _tLeft = routine.get_tLeft();
-      Serial.print("En instancia INIT: ");
-      display.updateTime(_tLeft);
 
-      if (_tLeft == 0)
-        routine.set_instance(WORK);
+      if (routine.get_tLeft() == 0)
+      {
+        seconds = 0; // Cuando resuelva el problema de librerias al poner routine general en "definiciones.h", este 'seconds' se va (y el timer modifica directo routine.seconds++)
+        routine.nextInstance();
+      }
+      display.updateTime(routine.get_tLeft()); // Ultimo, si pasa a nextInstance ya muestra el 't' y no '0'
     }
-
     break;
 
   case WORK:
     if (newSecond)
     {
       newSecond = false;
-      Serial.print("En instancia WORK -> Duracion: ");
-      Serial.println(routine.get_tWork());
+      routine.set_t(seconds);
+
+      if (routine.get_tLeft() == 0)
+      {
+        seconds = 0;
+        routine.nextInstance();
+      }
+      display.updateTime(routine.get_tLeft());
     }
     break;
 
@@ -50,8 +56,14 @@ void loop()
     if (newSecond)
     {
       newSecond = false;
-      Serial.print("En instancia REST -> Duracin: ");
-      Serial.println(routine.get_tRest());
+      routine.set_t(seconds);
+
+      if (routine.get_tLeft() == 0)
+      {
+        seconds = 0;
+        routine.nextInstance();
+      }
+      display.updateTime(routine.get_tLeft());
     }
     break;
 
@@ -59,8 +71,15 @@ void loop()
     if (newSecond)
     {
       newSecond = false;
-      Serial.print("En instancia REST_SET -> Duracion: ");
-      Serial.println(routine.get_tRestSets());
+      routine.set_t(seconds);
+
+      if (routine.get_tLeft() == 0)
+      {
+        seconds = 0;
+        routine.nextInstance();
+      }
+
+      display.updateTime(routine.get_tLeft());
     }
     break;
 

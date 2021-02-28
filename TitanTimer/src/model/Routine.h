@@ -1,5 +1,5 @@
-#ifndef Routine_h
-#define Routine_h
+#ifndef routine_h
+#define routine_h
 
 enum RoutineState
 {
@@ -64,11 +64,13 @@ public:
 
     //
     void init(int _tWork, int _tRest, int _tRestSets, char _rounds, char _sets); // + state, instance,... ??
-    void roundUp();
-    void roundDown();
-    void setUp();
-    void setDown();
+    void roundUp() { actualRound++; }
+    void roundDown(){ actualRound--; }
+    void setUp(){ actualSet++; }
+    void setDown(){ actualSet--; }
+    void nextInstance();
 
+    void incSeconds() { t++; }
     int get_tLeft(); // en funcion de t y la duracion de instance -> no necesito que el atributo tLeft exista}
 };
 

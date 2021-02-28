@@ -1,11 +1,6 @@
 #include <Arduino.h>
 #include "display.h"
-
-void Display::updateTime(int t)
-{
-  Serial.print("simulo display -> ");
-  Serial.println(t);
-}
+#include "../methods/methods.h"
 
 void Display::init()
 {
@@ -19,12 +14,27 @@ void Display::init()
   screen.setRotation(1, 1);    // The same hold for the last display
   screen.setRotation(2, 1);    // The first display is position upside down
   screen.setRotation(3, 1);    // The same hold for the last display
-  
+
   drawString("holis", 0, 0, true);
   screen.write();
 }
 
-// Imprime un mensaje
+void Display::clrscr()
+{
+  // limpio pantalla
+  screen.fillScreen(LOW);
+  screen.write();
+}
+
+void Display::updateTime(int t)
+{
+  clrscr();
+  drawString(mmss(t),0,0,true);
+  screen.write();
+}
+
+
+// drawString() -> Imprime un mensaje
 // Argumentos:
 //  @text: mensaje a imprimir
 //  @margin: posicion inicial (margen hacia el lado al que se encuentra alineado)
