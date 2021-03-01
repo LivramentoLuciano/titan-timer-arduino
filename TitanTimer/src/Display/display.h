@@ -23,8 +23,8 @@ public:
   void init();
 
   // metodos
-  // void setPosition(byte display, byte x, byte y) { _screen.setPosition(display, x, y); }
   void drawString(String text, int margin, int y, bool align, uint8_t size);
+  void writeStringSlider(String text, uint8_t size);
   void clrscr();
   void updateTime(int t);
 };

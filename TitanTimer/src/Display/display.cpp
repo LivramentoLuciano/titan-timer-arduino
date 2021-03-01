@@ -15,7 +15,8 @@ void Display::init()
       screen.setRotation(fila * _hDisplays + col, 1);
     }
 
-  drawString("Titan Timer", 0, 0, true, 2);
+  // drawString("Titan Timer", 0, 0, true, 2);
+  writeStringSlider("Titan Timer", 1);
   screen.write();
 }
 
@@ -64,5 +65,35 @@ void Display::drawString(String text, int margin, int y, bool align, uint8_t siz
       // carga el bitmap (como un buffer donde pongo todo lo que quiero imprimir y dsp mando 'write')
       screen.drawChar(x, y, text[c], HIGH, LOW, size);
     }
+  }
+}
+
+void Display::writeStringSlider(String text, uint8_t size)
+{
+  int spacer = 1;
+  int _width = 5 * size + _spacer;
+  int wait = 30;
+  
+  for (int i = 0; i < _width * text.length() + screen.width() - 1 - spacer; i++)
+  {
+    screen.fillScreen(LOW);
+    int letter = i / _width;
+    int x = (screen.width() - 1) - i % _width;
+    int y = (screen.height() - 8) / 2; // center the text vertically
+
+    while (x + _width - spacer >= 0 && letter >= 0)
+    {
+      if (letter < text.length())
+      {
+        screen.drawChar(x, y, text[letter], HIGH, LOW, 1);
+      }
+
+      letter--;
+      x -= _width;
+    }
+
+    screen.write(); // Send bitmap to display
+
+    delay(wait);
   }
 }
