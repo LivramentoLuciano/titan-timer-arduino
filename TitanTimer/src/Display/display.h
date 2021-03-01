@@ -10,6 +10,7 @@
 #define _pinCS 10
 #define _hDisplays 8
 #define _vDisplays 2
+#define DEFAULT_WIDTH 5
 
 class Display
 {
@@ -23,8 +24,17 @@ public:
   void init();
 
   // metodos
-  void drawString(String text, int margin, int y, bool align, uint8_t size);
   void writeStringSlider(String text, uint8_t size);
+  void drawString(String text, int x, int y, uint8_t size);
+  void drawStringTopLeft(String text, uint8_t size, int marginX = 0, int marginY = 0);
+  void drawStringTopRight(String text, uint8_t size, int marginX = 0, int marginY = 0);
+  void drawStringBottomLeft(String text, uint8_t size, int marginX = 0, int marginY = 0);
+  void drawStringBottomRight(String text, uint8_t size, int marginX = 0, int marginY = 0);
+  void drawStringCenterLeft(String text, uint8_t size, int marginX = 0);
+  void drawStringCenterRight(String text, uint8_t size, int marginX = 0);
+  void drawStringTopCenter(String text, uint8_t size, int marginY = 0);
+  void drawStringBottomCenter(String text, uint8_t size, int marginY = 0);
+  void drawStringCenterCenter(String text, uint8_t size);
   void clrscr();
   void updateTime(int t);
   void updateRound(char r);
