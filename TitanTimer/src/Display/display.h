@@ -8,8 +8,8 @@
 #include <Max72xxPanel.h>
 
 #define _pinCS 10
-#define _hDisplays 4
-#define _vDisplays 1
+#define _hDisplays 8
+#define _vDisplays 2
 
 class Display
 {
@@ -24,7 +24,7 @@ public:
 
   // metodos
   // void setPosition(byte display, byte x, byte y) { _screen.setPosition(display, x, y); }
-  void drawString(String text, int margin, int y, bool align);
+  void drawString(String text, int margin, int y, bool align, uint8_t size);
   void clrscr();
   void updateTime(int t);
 };
