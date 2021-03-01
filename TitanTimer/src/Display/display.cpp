@@ -29,9 +29,31 @@ void Display::clrscr()
 
 void Display::updateTime(int t)
 {
-  clrscr();
+  // clrscr(); // saco que limpie todo ya que tengo sectorizado 'time,round,set' (deberia limpiar solo Time aca)
+  // ademas, parece que es innecesario limpiar, drawChar repinta todo (borra lo previo, parece)
   drawString(mmss(t), 0, 0, true, 2);
   screen.write();
+}
+
+void Display::updateRound(char r)
+{
+  drawString(String(r, DEC), 0, 8, false, 1);
+  screen.write();
+}
+
+void Display::updateSet(char s)
+{
+  drawString(String(s, DEC), 0, 0, false, 1);
+  screen.write();
+}
+
+// actualiza: tiempo, round y set
+void Display::updateAll(int t, char r, char s)
+{
+  updateTime(t);
+  updateRound(r);
+  updateSet(s);
+  // ver si el hecho que c/u de estas tenga un 'screen.write()' tiene implicancias (como borrar cosas q no quiero borrar)
 }
 
 // drawString() -> Imprime un mensaje
@@ -73,7 +95,7 @@ void Display::writeStringSlider(String text, uint8_t size)
   int spacer = 1;
   int _width = 5 * size + _spacer;
   int wait = 30;
-  
+
   for (int i = 0; i < _width * text.length() + screen.width() - 1 - spacer; i++)
   {
     screen.fillScreen(LOW);

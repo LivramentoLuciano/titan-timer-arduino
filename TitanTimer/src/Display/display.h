@@ -27,6 +27,9 @@ public:
   void writeStringSlider(String text, uint8_t size);
   void clrscr();
   void updateTime(int t);
+  void updateRound(char r);
+  void updateSet(char s);
+  void updateAll(int t, char r, char s); 
 };
 
 #endif
