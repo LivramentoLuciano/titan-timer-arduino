@@ -22,13 +22,7 @@ void loop()
   switch (routine.get_instance())
   {
   case NOTHING:
-    Serial.println("Prueba basica de 'routine' -> A la espera de comandos");
-    delay(1000);
-    // simulo llegada de rutina
-    resetAndEnableTimer();
-    routine.init(8, 4, 12, 2, 2);
-    display.clrscr();
-    display.updateInitMsg(routine.get_tLeft());
+    // ver si hacer algo aca
     break;
 
   case INIT:
@@ -93,7 +87,7 @@ void loop()
       display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
     }
     break;
-
+  
   default:
     break;
   }
