@@ -3,7 +3,7 @@
 #include "src/Display/display.h"
 #include "src/miTimer/miTimer.h"
 
-Routine routine = Routine();
+extern Routine routine;
 extern Display display;
 extern volatile bool newSecond;
 extern volatile int seconds;

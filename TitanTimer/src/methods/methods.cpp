@@ -4,6 +4,7 @@
 #include "../miTimer/miTimer.h"
 
 extern Display display;
+extern Routine routine;
 
 void initTitan()
 {
