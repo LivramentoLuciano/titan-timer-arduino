@@ -2,16 +2,23 @@
 #include "src/model/Routine.h"
 #include "src/Display/display.h"
 #include "src/miTimer/miTimer.h"
+#include "src/Bluetooth/bluetooth.h"
 
 Routine routine = Routine();
 extern Display display;
 extern volatile bool newSecond;
 extern volatile int seconds;
+extern Bluetooth bluetooth;
 
 void setup() { initTitan(); }
 
 void loop()
 {
+  bluetooth.check4data();
+  
+  if (bluetooth.newCommand == true)
+    bluetooth.processCommand(bluetooth.buffer);
+  
   switch (routine.get_instance())
   {
   case NOTHING:
