@@ -60,3 +60,14 @@ void Routine::nextInstance()
     setUp();
   }
 }
+
+char* Routine:: get_instanceString(){
+  if (instance == WORK)
+    return "work";
+  else if (instance == REST)
+    return "prep";
+  else if (instance == REST_SET)
+    return "rest";
+  else if(instance == NOTHING)
+    return "";
+}

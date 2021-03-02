@@ -15,8 +15,10 @@ void Display::init()
       screen.setRotation(fila * _hDisplays + col, 1);
     }
 
-  // drawStringCenterCenter("Titan", 2)
-  writeStringSlider("Titan Timer", 2);
+  // drawStringCenterCenter("TITAN", 2);
+  // screen.write();
+  // delay(2000);
+  writeStringSlider("TITAN ACADEMY", 2);
   clrscr();
 }
 
@@ -31,29 +33,51 @@ void Display::updateTime(int t)
 {
   // clrscr(); // saco que limpie todo ya que tengo sectorizado 'time,round,set' (deberia limpiar solo Time aca)
   // ademas, parece que es innecesario limpiar, drawChar repinta todo (borra lo previo, parece)
-  drawStringTopLeft(mmss(t), 2, 0, 0);
+  drawStringBottomRight(mmss(t), 1, 0);
   screen.write();
 }
 
-void Display::updateRound(char r)
+void Display::updateRound(char r, char rt)
 {
-  drawStringBottomRight(String(r, DEC), 1, 0, 0);
+  drawStringTopLeft(String(r, DEC) + "/" + String(rt, DEC), 1, 1);
   screen.write();
 }
 
-void Display::updateSet(char s)
+void Display::updateSet(char s, char st)
 {
-  drawStringTopRight(String(s, DEC), 1, 0, 0);
+  drawStringBottomLeft(String(s, DEC) + "/" + String(st, DEC), 1, 0, 0);
   screen.write();
 }
 
-// actualiza: tiempo, round y set
-void Display::updateAll(int t, char r, char s)
+void Display::updateInstance(String instance)
 {
+  instance.toUpperCase();
+  drawStringTopRight(instance, 1);
+  screen.write();
+}
+
+// actualiza: tiempo, round, set e instancia
+void Display::updateAll(int t, char r, char rt, char s, char st, String i)
+{
+  clrscr();
   updateTime(t);
-  updateRound(r);
-  updateSet(s);
+  updateRound(r, rt);
+  updateSet(s, st);
+  updateInstance(i);
   // ver si el hecho que c/u de estas tenga un 'screen.write()' tiene implicancias (como borrar cosas q no quiero borrar)
+}
+
+void Display::showNewInstanceMsg(String newInstanceMsg)
+{
+  clrscr();
+  drawStringCenterRight(newInstanceMsg, 2);
+  screen.write();
+}
+
+void Display::updateInitMsg(int t)
+{
+  drawStringCenterRight(String(t, DEC) + "!", 2);
+  screen.write();
 }
 
 // drawString() -> Imprime un mensaje
@@ -144,7 +168,7 @@ void Display::writeStringSlider(String text, uint8_t size)
 {
   int spacer = 1;
   int _width = 5 * size + _spacer;
-  int wait = 30;
+  int wait = 10;
 
   for (int i = 0; i < _width * text.length() + screen.width() - 1 - spacer; i++)
   {

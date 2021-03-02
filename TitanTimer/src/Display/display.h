@@ -36,10 +36,14 @@ public:
   void drawStringBottomCenter(String text, uint8_t size, int marginY = 0);
   void drawStringCenterCenter(String text, uint8_t size);
   void clrscr();
+
   void updateTime(int t);
-  void updateRound(char r);
-  void updateSet(char s);
-  void updateAll(int t, char r, char s); 
+  void updateRound(char r, char rt);
+  void updateSet(char s, char st);
+  void updateAll(int t, char r, char rt, char s, char st, String i); 
+  void updateInstance(String instance); // ver si hacer que reciba RoutineInstance (enum)
+  void showNewInstanceMsg(String newInstanceMsg); // estas funciones no se si seria mejor tenerlas en p/ej 'methods' y q llamen a 'display.draw...' en lugar de tenerlas en 'display'
+  void updateInitMsg(int t);
 };
 
 #endif

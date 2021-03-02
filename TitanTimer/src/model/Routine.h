@@ -56,8 +56,10 @@ public:
     char get_actualSet() { return actualSet; }
     void set_actualSet(char aS) { actualSet = aS; }
     RoutineState get_state() { return state; };
+    char* get_stateString();
     void set_state(RoutineState s) { state = s; };
     RoutineInstance get_instance() { return instance; }
+    char* get_instanceString();
     void set_instance(RoutineInstance i) { instance = i; }
     int get_t() { return t; }
     void set_t(int _t) { t = _t; }
