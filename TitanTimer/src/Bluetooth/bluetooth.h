@@ -2,6 +2,7 @@
 #define BLUETOOTH_H
 #include <Arduino.h>
 
+// Ejemplo de comm: {S;tabata;5;3;14;2;1;}
 const char TRAMA_INI = '{';
 const char TRAMA_END = '}';
 const char MAX_DATA_LENGTH = 100;

@@ -26,3 +26,12 @@ void resetAndEnableTimer()
     TIFR1 = (1 << OCF1A);    // Limpio el flag para evitar que dispare interrupcion apenas habilito, no se xq es con '1' en vez de '0' que se limpia,porque en el manual dice otra cosa //TIFR1 &= ~(1<<OCF1A);
     TIMSK1 |= (1 << OCIE1A); // Habilita interrupción por comparación
 }
+
+void resetTimer()
+{
+    // inhabilitar timer, seconds = 0, newSecond = false
+    TCNT1 = 0;                //Inicializa el contador del Timer en 0
+    TIMSK1 &= ~(1 << OCIE1A); //Inhabilita interrupción por comparación
+    seconds = 0;
+    newSecond = false;
+}

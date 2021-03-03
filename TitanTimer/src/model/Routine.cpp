@@ -39,7 +39,7 @@ void Routine::nextInstance()
     if (actualRound == rounds)
     {
       if (actualSet == sets)
-        set_instance(NOTHING);
+        set_instance(FINISHED);
       else
         set_instance(REST_SET);
     }

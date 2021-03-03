@@ -18,7 +18,7 @@ void Display::init()
   // drawStringCenterCenter("TITAN", 2);
   // screen.write();
   // delay(2000);
-  writeStringSlider("TITAN ACADEMY", 2);
+  writeStringSlider("ESTO ES BOKE", 2);
   clrscr();
 }
 
@@ -70,13 +70,22 @@ void Display::updateAll(int t, char r, char rt, char s, char st, String i)
 void Display::showNewInstanceMsg(String newInstanceMsg)
 {
   clrscr();
-  drawStringCenterRight(newInstanceMsg, 2);
+  drawStringCenterCenter(newInstanceMsg, 2);
   screen.write();
 }
 
 void Display::updateInitMsg(int t)
 {
-  drawStringCenterRight(String(t, DEC) + "!", 2);
+  drawStringTopCenter("Inicio en:", 1);
+  drawStringBottomCenter(String(t, DEC), 1);
+  screen.write();
+}
+
+void Display::showIdleMsg()
+{
+  // O el mismo slider del principio (cada X segundos, sleep 5 seconds + mensaje + sleep ...)
+  drawStringTopCenter("Titan", 1);
+  drawStringBottomCenter("Academy", 1);
   screen.write();
 }
 
@@ -88,7 +97,7 @@ void Display::updateInitMsg(int t)
 //  @size: grosor de fuente
 void Display::drawString(String text, int x, int y, uint8_t size)
 {
-  int _spacer = 1; //*size
+  int _spacer = 1 * size;
   int _width = DEFAULT_WIDTH * size + _spacer;
   for (int c = 0; c < text.length(); c++)
   {
@@ -166,18 +175,18 @@ void Display::drawStringBottomRight(String text, uint8_t size, int marginX = 0, 
 
 void Display::writeStringSlider(String text, uint8_t size)
 {
-  int spacer = 1;
+  int _spacer = 1 * size;
   int _width = 5 * size + _spacer;
   int wait = 10;
 
-  for (int i = 0; i < _width * text.length() + screen.width() - 1 - spacer; i++)
+  for (int i = 0; i < _width * text.length() + screen.width() - 1 - _spacer; i++)
   {
     screen.fillScreen(LOW);
     int letter = i / _width;
     int x = (screen.width() - 1) - i % _width;
     int y = (screen.height() - 8 * size) / 2; // center the text vertically
 
-    while (x + _width - spacer >= 0 && letter >= 0)
+    while (x + _width - _spacer >= 0 && letter >= 0)
     {
       if (letter < text.length())
       {

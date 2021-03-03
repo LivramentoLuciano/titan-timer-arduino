@@ -16,8 +16,8 @@ class Display
 {
 private:
   Max72xxPanel screen = Max72xxPanel(_pinCS, _hDisplays, _vDisplays);
-  const int _spacer = 1;
-  const int _width = 5 + _spacer; // ancho de fuente
+  // const int _spacer = 1;
+  // const int _width = 5 + _spacer; // ancho de fuente
 
 public:
   Display(){};
@@ -44,6 +44,7 @@ public:
   void updateInstance(String instance); // ver si hacer que reciba RoutineInstance (enum)
   void showNewInstanceMsg(String newInstanceMsg); // estas funciones no se si seria mejor tenerlas en p/ej 'methods' y q llamen a 'display.draw...' en lugar de tenerlas en 'display'
   void updateInitMsg(int t);
+  void showIdleMsg(); // Muestra algo en tiempos muertos ?? 
 };
 
 #endif

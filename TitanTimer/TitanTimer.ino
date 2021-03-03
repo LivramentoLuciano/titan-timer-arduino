@@ -15,14 +15,15 @@ void setup() { initTitan(); }
 void loop()
 {
   bluetooth.check4data();
-  
+
   if (bluetooth.newCommand == true)
     bluetooth.processCommand(bluetooth.buffer);
-  
+
   switch (routine.get_instance())
   {
   case NOTHING:
-    // ver si hacer algo aca
+    // O el mismo slider del principio (cada X segundos, sleep 5 seconds + mensaje + sleep ...)
+    display.showIdleMsg();
     break;
 
   case INIT:
@@ -87,7 +88,15 @@ void loop()
       display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
     }
     break;
-  
+
+  case FINISHED:
+    resetTimer();
+    display.showNewInstanceMsg("FIN!");
+    delay(2000);
+    display.clrscr();
+    routine.set_instance(NOTHING);
+    break;
+
   default:
     break;
   }

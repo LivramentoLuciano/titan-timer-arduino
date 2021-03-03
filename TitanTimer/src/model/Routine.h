@@ -13,6 +13,7 @@ enum RoutineInstance
     REST,
     REST_SET,
     INIT,
+    FINISHED,
     NOTHING
 };
 
