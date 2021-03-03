@@ -51,6 +51,9 @@ void Bluetooth::processCommand(char *cmd)
 
   switch (_header[0])
   {
+  case LOAD_ROUTINE_HEADER:
+    handleLoadRoutine(_data);
+    break;
   case START_HEADER:
     handleStart(_data);
     break;
@@ -69,10 +72,10 @@ void Bluetooth::processCommand(char *cmd)
   buffer[0] = '\0'; // limpio el buffer RX
 }
 
-void Bluetooth::handleStart(char *_data)
+void Bluetooth::handleLoadRoutine(char *_data)
 {
-  Serial.print("Start: ");
-  Serial.println(_data);
+  // Serial.print("Carga rutina: ");
+  // Serial.println(_data);
   char *_strtokIndx;
 
   char *_mode = strtok(_data, ";");
@@ -89,10 +92,27 @@ void Bluetooth::handleStart(char *_data)
   int _rounds = atoi(strtok(NULL, ";")); // resolver que sea un char y no un char*
   int _sets = atoi(strtok(NULL, ";"));
 
-  routine.init(_tWork, _tRest, _tRestSets, (char) _rounds, (char) _sets);
-  resetAndEnableTimer();
-  display.clrscr();
-  display.updateInitMsg(routine.get_tLeft());
+  routine.set_settings(_tWork, _tRest, _tRestSets, (char)_rounds, (char)_sets);
+  resetTimer();
+}
+
+void Bluetooth::handleStart(char *_data)
+{
+  if (routine.get_isLoaded())
+  {
+    // Serial.print("Start: ");
+    // Serial.println(_data);
+
+    routine.init();
+    resetAndEnableTimer();
+    display.clrscr();
+    display.updateInitMsg(routine.get_tLeft());
+  }
+  else
+  {
+    // Aqui podria pedir a la app la rutina (En casos de reencendido del micro y celu estaba andando y quedaron desincronizados)
+    Serial.println("Rutina no cargada");
+  }
 }
 
 void Bluetooth::handlePause(char *_data)

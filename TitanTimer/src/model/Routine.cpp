@@ -1,13 +1,18 @@
 #include "Routine.h"
 
-void Routine::init(int _tWork, int _tRest, int _tRestSet, char _rounds, char _sets)
-{
+// Separo la carga de rutina de el 'start'
+void Routine:: set_settings(int _tWork, int _tRest, int _tRestSets, char _rounds, char _sets){
   tWork = _tWork;
   tRest = _tRest;
-  tRestSets = _tRestSet;
+  tRestSets = _tRestSets;
   rounds = _rounds;
   sets = _sets;
 
+  isLoaded = true;
+}
+
+void Routine::init()
+{
   state = STARTED;
   instance = INIT;
   t = 0;

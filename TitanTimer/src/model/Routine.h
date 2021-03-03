@@ -26,6 +26,7 @@ private:
     RoutineInstance instance;
     int t;
     const int tInit = 3;
+    bool isLoaded = false;
 
 public:
     // constructor -> No lo uso (Ver notas) -> Uso en cambio '.init()'
@@ -64,9 +65,11 @@ public:
     void set_instance(RoutineInstance i) { instance = i; }
     int get_t() { return t; }
     void set_t(int _t) { t = _t; }
+    bool get_isLoaded() {return isLoaded;} // si la rutina esta cargada (para evitar un Play sin rutina, ver q nunca lo borro que pasa si hago otras rutinas o repito a finalizar una)
 
     //
-    void init(int _tWork, int _tRest, int _tRestSets, char _rounds, char _sets); // + state, instance,... ??
+    void set_settings(int _tWork, int _tRest, int _tRestSets, char _rounds, char _sets); // Carga rutina
+    void init(); // start rutina
     void roundUp() { actualRound++; }
     void roundDown(){ actualRound--; }
     void setUp(){ actualSet++; }
@@ -75,6 +78,7 @@ public:
 
     void incSeconds() { t++; }
     int get_tLeft(); // en funcion de t y la duracion de instance -> no necesito que el atributo tLeft exista}
+    
 };
 
 #endif
