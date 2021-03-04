@@ -58,27 +58,28 @@ public:
     char get_actualSet() { return actualSet; }
     void set_actualSet(char aS) { actualSet = aS; }
     RoutineState get_state() { return state; };
-    char* get_stateString();
+    char *get_stateString();
     void set_state(RoutineState s) { state = s; };
     RoutineInstance get_instance() { return instance; }
-    char* get_instanceString();
+    char *get_instanceString();
     void set_instance(RoutineInstance i) { instance = i; }
     int get_t() { return t; }
     void set_t(int _t) { t = _t; }
-    bool get_isLoaded() {return isLoaded;} // si la rutina esta cargada (para evitar un Play sin rutina, ver q nunca lo borro que pasa si hago otras rutinas o repito a finalizar una)
+    bool get_isLoaded() { return isLoaded; } // si la rutina esta cargada (para evitar un Play sin rutina, ver q nunca lo borro que pasa si hago otras rutinas o repito a finalizar una)
 
     //
     void set_settings(int _tWork, int _tRest, int _tRestSets, char _rounds, char _sets); // Carga rutina
-    void init(); // start rutina
-    void roundUp() { actualRound++; }
-    void roundDown(){ actualRound--; }
-    void setUp(){ actualSet++; }
-    void setDown(){ actualSet--; }
+    void init();                                                                         // start rutina
+    void roundUp() { actualRound++; }                                                    /// No hago todo el chequeo para saber si avanzo o no de round, xq implica otras cosas como el timer en esa decision
+    void roundDown() { actualRound--; }
+    void setUp() { actualSet++; }
+    void setDown() { actualSet--; }
     void nextInstance();
 
     void incSeconds() { t++; }
     int get_tLeft(); // en funcion de t y la duracion de instance -> no necesito que el atributo tLeft exista}
-    
+    bool isLastRound() { return actualRound == rounds; }
+    bool isLastSet() { return actualSet == sets; }
 };
 
 #endif

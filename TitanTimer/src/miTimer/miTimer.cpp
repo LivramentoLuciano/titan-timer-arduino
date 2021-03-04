@@ -25,6 +25,8 @@ void resetAndEnableTimer()
     TCNT1 = 0;               // Inicializa el contador del Timer en 0
     TIFR1 = (1 << OCF1A);    // Limpio el flag para evitar que dispare interrupcion apenas habilito, no se xq es con '1' en vez de '0' que se limpia,porque en el manual dice otra cosa //TIFR1 &= ~(1<<OCF1A);
     TIMSK1 |= (1 << OCIE1A); // Habilita interrupción por comparación
+    seconds = 0;
+    newSecond = false;
 }
 
 void resetTimer()
@@ -34,4 +36,17 @@ void resetTimer()
     TIMSK1 &= ~(1 << OCIE1A); //Inhabilita interrupción por comparación
     seconds = 0;
     newSecond = false;
+}
+
+void pauseTimer()
+{
+    TCNT1 = 0;                //Inicializa el contador del Timer en 0, para que no quede desfasado con el timer de la APP (el cual esperara 1 segundo entero al reanudar)
+    TIMSK1 &= ~(1 << OCIE1A); //Inhabilita interrupción por comparación
+}
+
+void resumeTimer()
+{
+    TIFR1 = (1 << OCF1A);    //Limpio el flag para evitar que dispare interrupcion apenas habilito, no se xq es con '1' en vez de '0' que se limpia,porque en el manual dice otra cosa //TIFR1 &= ~(1<<OCF1A);TIFR1 = (1<<OCF1A); //TIFR1 &= ~(1<<OCF1A);      //Limpio el flag para evitar que dispare interrupcion apenas habilito
+    TCNT1 = 0;               //Inicializa el contador del Timer en 0, para que no quede desfasado con el timer de la APP (el cual esperara 1 segundo entero al reanudar)
+    TIMSK1 |= (1 << OCIE1A); //Habilita interrupción por comparación
 }

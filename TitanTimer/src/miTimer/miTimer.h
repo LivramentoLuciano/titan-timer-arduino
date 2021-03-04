@@ -10,5 +10,6 @@ ISR(TIMER1_COMPA_vect);
 void configTimer();
 void resetAndEnableTimer();
 void resetTimer();
-
+void pauseTimer();
+void resumeTimer();
 #endif
