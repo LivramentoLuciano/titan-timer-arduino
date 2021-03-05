@@ -15,7 +15,8 @@ const char ROUND_UP_HEADER = 'R';
 const char ROUND_DOWN_HEADER = 'r';
 const char REPLAY_HEADER = 'b';
 const char FORWARD_HEADER = 'f';
-const char RESPONSE_OK_HEADER = 'K';
+const char RESPONSE_OK_HEADER = 'K';  // del micro hacia la app
+const char FINISHED_HEADER = 'F';     // del micro hacia la app
 
 class Bluetooth
 {
@@ -30,6 +31,7 @@ public:
   void check4data();
   void processCommand(char *cmd);
   void sendOk(char type);
+  void sendFinished();  // Por tema de 'state' en App
 
   // Estos deberian estar fuera de Bluetooth, metodos aparte, por ahora lo dejo aca
   void handleLoadRoutine(char *data);

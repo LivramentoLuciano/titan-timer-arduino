@@ -40,7 +40,7 @@ void Bluetooth::check4data()
 
 void Bluetooth::processCommand(char *cmd)
 {
-  Serial.print("Recibio comando: " + String(cmd) + " - Procesando...");
+  // Serial.print("Recibio comando: " + String(cmd) + " - Procesando...");
 
   char *_header;
   char *_data;
@@ -120,7 +120,7 @@ void Bluetooth::handleStart(char *_data)
   else
   {
     // Aqui podria pedir a la app la rutina (En casos de reencendido del micro y celu estaba andando y quedaron desincronizados)
-    Serial.println("Rutina no cargada");
+    // Serial.println("Rutina no cargada");
   }
 }
 
@@ -205,4 +205,17 @@ void Bluetooth::sendOk(char type)
   // Igual tampoco podria castear el type, asi q toy en la misma, no podria usarlo ese
 
   Serial.println(_trama);
+}
+
+// Por tema de 'state' en App. Resuelve que al finalizar se ponga en 'stopped'
+// Igual voy a ver si saco los 'state' x el problema de background process
+// que no se actualizarian si estoy con la app en 2* plano
+// sacar 'state' tendria que separar boton play y pause y el problema q tenia de detectar el 'state' para saber si mando la rutina o no, se me acaba de ocurrir q lo puedo resolver en el micro, que le diga 'che, me mandaste play pero no tengo la rutina, pasamela0
+void Bluetooth:: sendFinished(){
+  String _trama = "";
+  _trama.concat(TRAMA_INI);
+  _trama.concat(FINISHED_HEADER);
+  _trama.concat(TRAMA_SEPARATOR);
+  _trama.concat(TRAMA_END);
+  Serial.print(_trama);
 }
