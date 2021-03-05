@@ -91,6 +91,7 @@ void loop()
 
   case FINISHED:
     resetTimer();
+    bluetooth.sendFinished();
     display.showNewInstanceMsg("FIN!");
     delay(2000);
     display.clrscr();

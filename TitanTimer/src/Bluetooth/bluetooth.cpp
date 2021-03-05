@@ -40,7 +40,7 @@ void Bluetooth::check4data()
 
 void Bluetooth::processCommand(char *cmd)
 {
-  Serial.print("Recibio comando: " + String(cmd) + " - Procesando...");
+  // Serial.print("Recibio comando: " + String(cmd) + " - Procesando...");
 
   char *_header;
   char *_data;
@@ -51,6 +51,9 @@ void Bluetooth::processCommand(char *cmd)
 
   switch (_header[0])
   {
+  case LOAD_ROUTINE_HEADER:
+    handleLoadRoutine(_data);
+    break;
   case START_HEADER:
     handleStart(_data);
     break;
@@ -59,6 +62,12 @@ void Bluetooth::processCommand(char *cmd)
     break;
   case RESUME_HEADER:
     handleResume(_data);
+    break;
+  case ROUND_UP_HEADER:
+    handleRoundUp(_data);
+    break;
+  case ROUND_DOWN_HEADER:
+    handleRoundDown(_data);
     break;
 
   default:
@@ -69,10 +78,10 @@ void Bluetooth::processCommand(char *cmd)
   buffer[0] = '\0'; // limpio el buffer RX
 }
 
-void Bluetooth::handleStart(char *_data)
+void Bluetooth::handleLoadRoutine(char *_data)
 {
-  Serial.print("Start: ");
-  Serial.println(_data);
+  // Serial.print("Carga rutina: ");
+  // Serial.println(_data);
   char *_strtokIndx;
 
   char *_mode = strtok(_data, ";");
@@ -89,32 +98,124 @@ void Bluetooth::handleStart(char *_data)
   int _rounds = atoi(strtok(NULL, ";")); // resolver que sea un char y no un char*
   int _sets = atoi(strtok(NULL, ";"));
 
-  routine.init(_tWork, _tRest, _tRestSets, (char) _rounds, (char) _sets);
-  resetAndEnableTimer();
-  display.clrscr();
-  display.updateInitMsg(routine.get_tLeft());
+  routine.set_settings(_tWork, _tRest, _tRestSets, (char)_rounds, (char)_sets);
+  resetTimer();
+
+  sendOk(LOAD_ROUTINE_HEADER);
+}
+
+void Bluetooth::handleStart(char *_data)
+{
+  if (routine.get_isLoaded())
+  {
+    // Serial.print("Start: ");
+    // Serial.println(_data);
+
+    routine.init();
+    resetAndEnableTimer();
+    display.clrscr();
+    display.updateInitMsg(routine.get_tLeft());
+    sendOk(START_HEADER);
+  }
+  else
+  {
+    // Aqui podria pedir a la app la rutina (En casos de reencendido del micro y celu estaba andando y quedaron desincronizados)
+    // Serial.println("Rutina no cargada");
+  }
 }
 
 void Bluetooth::handlePause(char *_data)
 {
-  Serial.print("Pause: ");
-  Serial.println(_data);
+  pauseTimer();
+  sendOk(PAUSE_HEADER);
 }
 
 void Bluetooth::handleResume(char *_data)
 {
-  Serial.print("Resume: ");
-  Serial.println(_data);
+  resumeTimer();
+  sendOk(RESUME_HEADER);
 }
 
 void Bluetooth::handleRoundUp(char *_data)
 {
-  Serial.print("RoundUp: ");
-  Serial.println(_data);
+  if (routine.isLastRound())
+  {
+    if (!routine.isLastSet()) // en ultimo set omito
+    {
+      routine.set_actualRound(1);
+      routine.setUp();
+      routine.set_instance(WORK);
+      routine.set_t(0);
+      resetTimer(); // lo tira a 0 y pausa
+      display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
+    }
+  }
+  else
+  {
+    routine.roundUp();
+    routine.set_instance(WORK);
+    routine.set_t(0);
+    resetTimer();
+    // display.clrscr();
+    // resolver esto del updateAll q esta horrible
+    display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
+  }
+  sendOk(ROUND_UP_HEADER);
 }
 
 void Bluetooth::handleRoundDown(char *_data)
 {
-  Serial.print("RoundDown: ");
-  Serial.println(_data);
+  if (routine.get_actualRound() > 1)
+  {
+    routine.roundDown();
+    routine.set_instance(WORK);
+    routine.set_t(0);
+    resetTimer(); // lo tira a 0 y pausa
+    display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
+  }
+  else
+  {
+    if (routine.get_actualSet() > 1)
+    {
+      routine.set_actualRound(routine.get_rounds());
+      routine.setDown();
+      routine.set_instance(WORK);
+      routine.set_t(0);
+      resetTimer(); // lo tira a 0 y pausa
+      display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
+    }
+  }
+  sendOk(ROUND_DOWN_HEADER);
+}
+
+// Responde Recibido Ok: {OK_HEADER; type}
+// type: es el tipo de comando por el que esta respondiendo el Ok (sera el ..._HEADER)
+void Bluetooth::sendOk(char type)
+{
+  String _trama = "";
+  _trama.concat(TRAMA_INI);
+  _trama.concat(RESPONSE_OK_HEADER);
+  _trama.concat(TRAMA_SEPARATOR);
+  _trama.concat(type);
+  _trama.concat(TRAMA_SEPARATOR);
+  _trama.concat(TRAMA_END);
+
+  // Lo dejo asi para probar, porque el siguiente modo es mas corto pero no puedo castear a String los char correctamente
+  //  _trama = "{K;" + ... +";}";
+  // Igual tampoco podria castear el type, asi q toy en la misma, no podria usarlo ese
+
+  Serial.println(_trama);
+}
+
+// Por tema de 'state' en App. Resuelve que al finalizar se ponga en 'stopped'
+// Igual voy a ver si saco los 'state' x el problema de background process
+// que no se actualizarian si estoy con la app en 2* plano
+// sacar 'state' tendria que separar boton play y pause y el problema q tenia de detectar el 'state' para saber si mando la rutina o no, se me acaba de ocurrir q lo puedo resolver en el micro, que le diga 'che, me mandaste play pero no tengo la rutina, pasamela0
+void Bluetooth:: sendFinished(){
+  String _trama = "";
+  _trama.concat(TRAMA_INI);
+  _trama.concat(FINISHED_HEADER);
+  _trama.concat(TRAMA_SEPARATOR);
+  _trama.concat(TRAMA_END);
+  Serial.print(_trama);
 }
