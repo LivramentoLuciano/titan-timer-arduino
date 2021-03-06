@@ -5,6 +5,12 @@
 #include "TimerOne.h"
 
 
+enum TimerState {
+    STARTED,
+    PAUSED,
+    STOPPED,
+};
+
 ISR(TIMER1_COMPA_vect);
 
 void configTimer();
