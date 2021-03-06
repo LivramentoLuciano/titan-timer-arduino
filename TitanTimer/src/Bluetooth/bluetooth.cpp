@@ -5,6 +5,7 @@
 
 extern Routine routine; // Por los handlers (pero deberia hacerse en 'methods')
 extern Display display;
+extern TimerState timerState;
 
 void Bluetooth::check4data()
 {
@@ -60,6 +61,9 @@ void Bluetooth::processCommand(char *cmd)
   case PAUSE_HEADER:
     handlePause(_data);
     break;
+  case PLAY_PAUSE_HEADER:
+    handlePlayPause(_data);
+    break;
   case RESUME_HEADER:
     handleResume(_data);
     break;
@@ -102,6 +106,12 @@ void Bluetooth::handleLoadRoutine(char *_data)
   resetTimer();
 
   sendOk(LOAD_ROUTINE_HEADER);
+
+  // Serial.print("Cargada la rutina, arranco...");
+  routine.init();
+  resetAndEnableTimer();
+  display.clrscr();
+  display.updateInitMsg(routine.get_tLeft());
 }
 
 void Bluetooth::handleStart(char *_data)
@@ -119,8 +129,9 @@ void Bluetooth::handleStart(char *_data)
   }
   else
   {
-    // Aqui podria pedir a la app la rutina (En casos de reencendido del micro y celu estaba andando y quedaron desincronizados)
-    // Serial.println("Rutina no cargada");
+    // No tengo la rutina, la pido
+    // Messirve en funcionamiento normal y, creo, que tmb si se reinicia el micro
+    sendRequestSettings();
   }
 }
 
@@ -128,6 +139,20 @@ void Bluetooth::handlePause(char *_data)
 {
   pauseTimer();
   sendOk(PAUSE_HEADER);
+}
+
+void Bluetooth::handlePlayPause(char *_data)
+{
+  // el 'state' de routine lo paso al MiTimer
+  if (timerState == STOPPED)
+  {
+    // if (routine.get_isLoaded()) // NO, xq sino no andaria si en la app cambio la rutina, el micro va a ignorar la nueva
+    sendRequestSettings(); // Siempre pido la rutina al inicio, aunque sea la misma, por lo puesto arriba
+  }
+  else if (timerState == PAUSED)
+    resumeTimer();
+  else if (timerState == STARTED)
+    pauseTimer();
 }
 
 void Bluetooth::handleResume(char *_data)
@@ -211,10 +236,22 @@ void Bluetooth::sendOk(char type)
 // Igual voy a ver si saco los 'state' x el problema de background process
 // que no se actualizarian si estoy con la app en 2* plano
 // sacar 'state' tendria que separar boton play y pause y el problema q tenia de detectar el 'state' para saber si mando la rutina o no, se me acaba de ocurrir q lo puedo resolver en el micro, que le diga 'che, me mandaste play pero no tengo la rutina, pasamela0
-void Bluetooth:: sendFinished(){
+void Bluetooth::sendFinished()
+{
   String _trama = "";
   _trama.concat(TRAMA_INI);
   _trama.concat(FINISHED_HEADER);
+  _trama.concat(TRAMA_SEPARATOR);
+  _trama.concat(TRAMA_END);
+  Serial.print(_trama);
+}
+
+// Por cambio al sacar 'state' en App
+void Bluetooth::sendRequestSettings()
+{
+  String _trama = "";
+  _trama.concat(TRAMA_INI);
+  _trama.concat(LOAD_ROUTINE_HEADER);
   _trama.concat(TRAMA_SEPARATOR);
   _trama.concat(TRAMA_END);
   Serial.print(_trama);

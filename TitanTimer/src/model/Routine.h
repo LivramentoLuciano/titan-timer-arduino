@@ -1,12 +1,6 @@
 #ifndef routine_h
 #define routine_h
 
-enum RoutineState
-{
-    STARTED,
-    PAUSED,
-    STOPPED
-};
 enum RoutineInstance
 {
     WORK,
@@ -22,7 +16,6 @@ class Routine
 private:
     int tWork, tRest, tRestSets;
     char rounds, sets, actualRound, actualSet;
-    RoutineState state;
     RoutineInstance instance;
     int t;
     const int tInit = 3;
@@ -30,7 +23,7 @@ private:
 
 public:
     // constructor -> No lo uso (Ver notas) -> Uso en cambio '.init()'
-    Routine(int _tWork, int _tRest, int _tRestSets, int _rounds, int _sets) : state(STOPPED), instance(NOTHING)
+    Routine(int _tWork, int _tRest, int _tRestSets, int _rounds, int _sets) : instance(NOTHING)
     {
         tWork = _tWork;
         tRest = _tRest;
@@ -40,7 +33,7 @@ public:
     };
 
     // constructor pelao
-    Routine() : state(STOPPED), instance(NOTHING){};
+    Routine() : instance(NOTHING){};
 
     // getters y setters basicos
     int get_tWork() { return tWork; }
@@ -57,9 +50,6 @@ public:
     void set_actualRound(char aR) { actualRound = aR; }
     char get_actualSet() { return actualSet; }
     void set_actualSet(char aS) { actualSet = aS; }
-    RoutineState get_state() { return state; };
-    char *get_stateString();
-    void set_state(RoutineState s) { state = s; };
     RoutineInstance get_instance() { return instance; }
     char *get_instanceString();
     void set_instance(RoutineInstance i) { instance = i; }

@@ -9,6 +9,7 @@ extern Display display;
 extern volatile bool newSecond;
 extern volatile int seconds;
 extern Bluetooth bluetooth;
+extern TimerState timerState;
 
 void setup() { initTitan(); }
 
@@ -91,6 +92,7 @@ void loop()
 
   case FINISHED:
     resetTimer();
+    timerState = STOPPED; // poner un metodo stopTimer (reset + STOPPED)
     bluetooth.sendFinished();
     display.showNewInstanceMsg("FIN!");
     delay(2000);

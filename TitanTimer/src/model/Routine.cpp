@@ -13,7 +13,6 @@ void Routine:: set_settings(int _tWork, int _tRest, int _tRestSets, char _rounds
 
 void Routine::init()
 {
-  state = STARTED;
   instance = INIT;
   t = 0;
   actualRound = 1;

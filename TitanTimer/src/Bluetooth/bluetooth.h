@@ -10,6 +10,7 @@ const char MAX_DATA_LENGTH = 100;
 const char LOAD_ROUTINE_HEADER = 'L';
 const char START_HEADER = 'S';
 const char PAUSE_HEADER = 'P';
+const char PLAY_PAUSE_HEADER = 'X';
 const char RESUME_HEADER = 's';
 const char ROUND_UP_HEADER = 'R';
 const char ROUND_DOWN_HEADER = 'r';
@@ -32,11 +33,13 @@ public:
   void processCommand(char *cmd);
   void sendOk(char type);
   void sendFinished();  // Por tema de 'state' en App
+  void sendRequestSettings();
 
   // Estos deberian estar fuera de Bluetooth, metodos aparte, por ahora lo dejo aca
   void handleLoadRoutine(char *data);
   void handleStart(char *data);
   void handlePause(char *data);
+  void handlePlayPause(char *data);
   void handleResume(char *data);
   void handleRoundUp(char *data);
   void handleRoundDown(char *data);
