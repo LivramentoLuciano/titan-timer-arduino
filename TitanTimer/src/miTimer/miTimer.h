@@ -18,4 +18,5 @@ void resetAndEnableTimer();
 void resetTimer();
 void pauseTimer();
 void resumeTimer();
+char timerStateChar();
 #endif

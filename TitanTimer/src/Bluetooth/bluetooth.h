@@ -17,6 +17,7 @@ const char REPLAY_HEADER = 'b';
 const char FORWARD_HEADER = 'f';
 const char RESPONSE_OK_HEADER = 'K';  // del micro hacia la app
 const char FINISHED_HEADER = 'F';     // del micro hacia la app
+const char TIMER_STATE_HEADER = 'T';
 
 class Bluetooth
 {
@@ -32,6 +33,7 @@ public:
   void processCommand(char *cmd);
   void sendOk(char type);
   void sendFinished();  // Por tema de 'state' en App
+  void sendTimerState();  // Actualiza el 'state' a la app (me lo pide cuando vuelve de background)
 
   // Estos deberian estar fuera de Bluetooth, metodos aparte, por ahora lo dejo aca
   void handleLoadRoutine(char *data);
@@ -40,6 +42,7 @@ public:
   void handleResume(char *data);
   void handleRoundUp(char *data);
   void handleRoundDown(char *data);
+  void handleRequestTimerState(char *data);
 };
 
 #endif

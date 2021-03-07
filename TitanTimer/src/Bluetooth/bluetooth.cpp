@@ -69,6 +69,9 @@ void Bluetooth::processCommand(char *cmd)
   case ROUND_DOWN_HEADER:
     handleRoundDown(_data);
     break;
+  
+  case TIMER_STATE_HEADER:
+    handleRequestTimerState(_data);
 
   default:
     break;
@@ -188,6 +191,11 @@ void Bluetooth::handleRoundDown(char *_data)
   sendOk(ROUND_DOWN_HEADER);
 }
 
+void Bluetooth::handleRequestTimerState(char *data)
+{
+  sendTimerState();
+}
+
 // Responde Recibido Ok: {OK_HEADER; type}
 // type: es el tipo de comando por el que esta respondiendo el Ok (sera el ..._HEADER)
 void Bluetooth::sendOk(char type)
@@ -211,10 +219,25 @@ void Bluetooth::sendOk(char type)
 // Igual voy a ver si saco los 'state' x el problema de background process
 // que no se actualizarian si estoy con la app en 2* plano
 // sacar 'state' tendria que separar boton play y pause y el problema q tenia de detectar el 'state' para saber si mando la rutina o no, se me acaba de ocurrir q lo puedo resolver en el micro, que le diga 'che, me mandaste play pero no tengo la rutina, pasamela0
-void Bluetooth:: sendFinished(){
+void Bluetooth::sendFinished()
+{
+  // String _trama = "";
+  // _trama.concat(TRAMA_INI);
+  // _trama.concat(FINISHED_HEADER);
+  // _trama.concat(TRAMA_SEPARATOR);
+  // _trama.concat(TRAMA_END);
+  // Serial.print(_trama);
+  sendTimerState();
+}
+
+void Bluetooth::sendTimerState()
+{
   String _trama = "";
+  char _state = timerStateChar();
   _trama.concat(TRAMA_INI);
-  _trama.concat(FINISHED_HEADER);
+  _trama.concat(TIMER_STATE_HEADER);
+  _trama.concat(TRAMA_SEPARATOR);
+  _trama.concat(_state);
   _trama.concat(TRAMA_SEPARATOR);
   _trama.concat(TRAMA_END);
   Serial.print(_trama);

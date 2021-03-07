@@ -55,3 +55,10 @@ void resumeTimer()
     TIMSK1 |= (1 << OCIE1A); //Habilita interrupción por comparación
     timerState = STARTED;
 }
+
+char timerStateChar(){
+    if (timerState == STARTED) return 's';
+    else if(timerState == STOPPED) return 'o';
+    else if(timerState == PAUSED) return 'p';
+    else return "q"; // error
+}
