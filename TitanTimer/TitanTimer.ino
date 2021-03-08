@@ -93,7 +93,7 @@ void loop()
   case FINISHED:
     resetTimer();
     timerState = STOPPED;
-    bluetooth.sendFinished();
+    bluetooth.sendTimerState(); // finished
     display.showNewInstanceMsg("FIN!");
     delay(2000);
     display.clrscr();

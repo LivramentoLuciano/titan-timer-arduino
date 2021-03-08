@@ -75,3 +75,7 @@ char* Routine:: get_instanceString(){
   else if(instance == NOTHING)
     return "";
 }
+
+bool Routine:: enabled() {
+  return isLoaded && (instance != NOTHING) && (instance != FINISHED);
+}

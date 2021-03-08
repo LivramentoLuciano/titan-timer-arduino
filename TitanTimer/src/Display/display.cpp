@@ -33,26 +33,26 @@ void Display::updateTime(int t)
 {
   // clrscr(); // saco que limpie todo ya que tengo sectorizado 'time,round,set' (deberia limpiar solo Time aca)
   // ademas, parece que es innecesario limpiar, drawChar repinta todo (borra lo previo, parece)
-  drawStringBottomRight(mmss(t), 1, 0);
+  drawStringBottomLeft(mmss(t), 1, 1);
   screen.write();
 }
 
 void Display::updateRound(char r, char rt)
 {
-  drawStringTopLeft(String(r, DEC) + "/" + String(rt, DEC), 1, 1);
+  drawStringTopRight(String(r, DEC) + "/" + String(rt, DEC), 1, 1);
   screen.write();
 }
 
 void Display::updateSet(char s, char st)
 {
-  drawStringBottomLeft(String(s, DEC) + "/" + String(st, DEC), 1, 0, 0);
+  drawStringBottomRight(String(s, DEC) + "/" + String(st, DEC), 1, 1);
   screen.write();
 }
 
 void Display::updateInstance(String instance)
 {
   instance.toUpperCase();
-  drawStringTopRight(instance, 1);
+  drawStringTopLeft(instance, 1, 1);
   screen.write();
 }
 

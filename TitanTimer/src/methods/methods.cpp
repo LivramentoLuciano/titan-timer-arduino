@@ -10,9 +10,9 @@ void initTitan()
   for (int i = 0; i < 4; i++)
     pinMode(TEST_LEDS[i], OUTPUT);
 
-  Serial.begin(9600);
   configTimer();
   display.init();
+  Serial.begin(9600);
 }
 
 void testLeds()

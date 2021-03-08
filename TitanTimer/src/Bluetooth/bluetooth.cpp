@@ -69,9 +69,10 @@ void Bluetooth::processCommand(char *cmd)
   case ROUND_DOWN_HEADER:
     handleRoundDown(_data);
     break;
-  
+
   case TIMER_STATE_HEADER:
     handleRequestTimerState(_data);
+    break;
 
   default:
     break;
@@ -129,66 +130,84 @@ void Bluetooth::handleStart(char *_data)
 
 void Bluetooth::handlePause(char *_data)
 {
-  pauseTimer();
-  sendOk(PAUSE_HEADER);
+  if (routine.enabled())
+  {
+    pauseTimer();
+    sendOk(PAUSE_HEADER);
+  }
 }
 
 void Bluetooth::handleResume(char *_data)
 {
-  resumeTimer();
-  sendOk(RESUME_HEADER);
+  if (routine.enabled())
+  { // ver si hacer asi o responder confirmando el msj, pero avisando que se omitio la accion
+    resumeTimer();
+    sendOk(RESUME_HEADER);
+  }
 }
 
 void Bluetooth::handleRoundUp(char *_data)
 {
-  if (routine.isLastRound())
+  if (routine.enabled())
   {
-    if (!routine.isLastSet()) // en ultimo set omito
+    if (routine.isLastRound())
     {
-      routine.set_actualRound(1);
-      routine.setUp();
+      if (!routine.isLastSet()) // en ultimo set omito
+      {
+        routine.set_actualRound(1);
+        routine.setUp();
+        routine.set_instance(WORK);
+        routine.set_t(0);
+        resetTimer(); // lo tira a 0 y pausa
+        display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
+        sendOk(ROUND_UP_HEADER); // Lo meto, evito que responda Ok en ultimo round del ultimo set, quizas puedo cambiar a que responda Ok, de recibido pero sin cambios
+      }
+    }
+    else
+    {
+      routine.roundUp();
       routine.set_instance(WORK);
       routine.set_t(0);
-      resetTimer(); // lo tira a 0 y pausa
+      resetTimer();
+      // display.clrscr();
+      // resolver esto del updateAll q esta horrible
       display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
+      sendOk(ROUND_UP_HEADER);
     }
   }
-  else
-  {
-    routine.roundUp();
-    routine.set_instance(WORK);
-    routine.set_t(0);
-    resetTimer();
-    // display.clrscr();
-    // resolver esto del updateAll q esta horrible
-    display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
-  }
-  sendOk(ROUND_UP_HEADER);
 }
 
 void Bluetooth::handleRoundDown(char *_data)
 {
-  if (routine.get_actualRound() > 1)
+  if (routine.enabled())
   {
-    routine.roundDown();
-    routine.set_instance(WORK);
-    routine.set_t(0);
-    resetTimer(); // lo tira a 0 y pausa
-    display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
-  }
-  else
-  {
-    if (routine.get_actualSet() > 1)
+    if (routine.get_actualRound() > 1)
     {
-      routine.set_actualRound(routine.get_rounds());
-      routine.setDown();
-      routine.set_instance(WORK);
+      if (routine.get_t() == 0)
+        routine.roundDown(); // Si es 0 -> resto 1 round, sino solo tiro a 0 el round actual
+
+      routine.set_t(0);
+      resetTimer();               // lo tira a 0 y pausa
+      routine.set_instance(WORK); // Me asegura funcionamiento correcto tmb en 'rest / restSets'
+      display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
+      sendOk(ROUND_DOWN_HEADER); // Lo meto para que no responda Ok en casos que omite (quizas puedo cambiarlo a que responda Ok de recibido, pero avisando que omitido)
+    }
+    else
+    { // primer round
+      if ((routine.get_actualSet() > 1) && (routine.get_t() == 0))
+      {
+        // Si es 0 -> paso a ultimo round del set anterior
+        routine.set_actualRound(routine.get_rounds());
+        routine.setDown();
+      }
+      // Primer round del primer set o de cualquier set pero con tiempo actual mayor a 0 -> tiro a 0 (sin cambiar el round)
       routine.set_t(0);
       resetTimer(); // lo tira a 0 y pausa
+      routine.set_instance(WORK);
       display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
+      sendOk(ROUND_DOWN_HEADER);
     }
   }
-  sendOk(ROUND_DOWN_HEADER);
 }
 
 void Bluetooth::handleRequestTimerState(char *data)
@@ -215,21 +234,9 @@ void Bluetooth::sendOk(char type)
   Serial.println(_trama);
 }
 
-// Por tema de 'state' en App. Resuelve que al finalizar se ponga en 'stopped'
-// Igual voy a ver si saco los 'state' x el problema de background process
-// que no se actualizarian si estoy con la app en 2* plano
-// sacar 'state' tendria que separar boton play y pause y el problema q tenia de detectar el 'state' para saber si mando la rutina o no, se me acaba de ocurrir q lo puedo resolver en el micro, que le diga 'che, me mandaste play pero no tengo la rutina, pasamela0
-void Bluetooth::sendFinished()
-{
-  // String _trama = "";
-  // _trama.concat(TRAMA_INI);
-  // _trama.concat(FINISHED_HEADER);
-  // _trama.concat(TRAMA_SEPARATOR);
-  // _trama.concat(TRAMA_END);
-  // Serial.print(_trama);
-  sendTimerState();
-}
-
+// Envia el estado del timer (paused, started, etc)
+// Tanto ante un 'request' de la app, como al finalizar la rutina
+// Soluciona el conflicto de app yendo a 2* plano
 void Bluetooth::sendTimerState()
 {
   String _trama = "";
