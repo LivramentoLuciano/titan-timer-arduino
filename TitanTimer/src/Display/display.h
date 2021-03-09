@@ -12,6 +12,8 @@
 #define _vDisplays 2
 #define DEFAULT_WIDTH 5
 
+const char SLIDER_MSG_WAIT = 10;
+
 class Display
 {
 private:
@@ -24,7 +26,7 @@ public:
   void init();
 
   // metodos
-  void writeStringSlider(String text, uint8_t size);
+  void writeStringSlider(String text, uint8_t size);  // No bloqueante
   void drawString(String text, int x, int y, uint8_t size);
   void drawStringTopLeft(String text, uint8_t size, int marginX = 0, int marginY = 0);
   void drawStringTopRight(String text, uint8_t size, int marginX = 0, int marginY = 0);

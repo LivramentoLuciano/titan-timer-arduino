@@ -23,7 +23,7 @@ void loop()
   switch (routine.get_instance())
   {
   case NOTHING:
-    // O el mismo slider del principio (cada X segundos, sleep 5 seconds + mensaje + sleep ...)
+    // if (timeout) // Cada X segundos muestro el msj, luego apago
     display.showIdleMsg();
     break;
 

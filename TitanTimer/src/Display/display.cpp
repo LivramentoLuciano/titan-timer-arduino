@@ -2,6 +2,9 @@
 #include "display.h"
 #include "../methods/methods.h"
 
+int i_sliderMsg = 0;
+bool doneSliderMsg = false;
+
 void Display::init()
 {
   screen.setIntensity(3);
@@ -15,10 +18,6 @@ void Display::init()
       screen.setRotation(fila * _hDisplays + col, 1);
     }
 
-  // drawStringCenterCenter("TITAN", 2);
-  // screen.write();
-  // delay(2000);
-  writeStringSlider("ESTO ES BOKE", 2);
   clrscr();
 }
 
@@ -83,10 +82,12 @@ void Display::updateInitMsg(int t)
 
 void Display::showIdleMsg()
 {
-  // O el mismo slider del principio (cada X segundos, sleep 5 seconds + mensaje + sleep ...)
-  drawStringTopCenter("Titan", 1);
-  drawStringBottomCenter("Academy", 1);
-  screen.write();
+  writeStringSlider("TITAN ACADEMY", 2);
+  if (doneSliderMsg)
+  {
+    doneSliderMsg = false;
+    i_sliderMsg = 0;
+  }
 }
 
 // drawString() -> Imprime un mensaje
@@ -177,13 +178,12 @@ void Display::writeStringSlider(String text, uint8_t size)
 {
   int _spacer = 1 * size;
   int _width = 5 * size + _spacer;
-  int wait = 10;
 
-  for (int i = 0; i < _width * text.length() + screen.width() - 1 - _spacer; i++)
+  if (i_sliderMsg <= _width * text.length() + screen.width() - 1 - _spacer)
   {
     screen.fillScreen(LOW);
-    int letter = i / _width;
-    int x = (screen.width() - 1) - i % _width;
+    int letter = i_sliderMsg / _width;
+    int x = (screen.width() - 1) - i_sliderMsg % _width;
     int y = (screen.height() - 8 * size) / 2; // center the text vertically
 
     while (x + _width - _spacer >= 0 && letter >= 0)
@@ -192,13 +192,17 @@ void Display::writeStringSlider(String text, uint8_t size)
       {
         screen.drawChar(x, y, text[letter], HIGH, LOW, size);
       }
-
       letter--;
       x -= _width;
     }
 
     screen.write(); // Send bitmap to display
-
-    delay(wait);
+    i_sliderMsg++;
+    delay(10);
+  }
+  else
+  {
+    doneSliderMsg = true;
+    delay(2000);
   }
 }
