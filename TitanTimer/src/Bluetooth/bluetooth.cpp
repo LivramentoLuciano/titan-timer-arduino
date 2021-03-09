@@ -119,6 +119,7 @@ void Bluetooth::handleStart(char *_data)
     resetAndEnableTimer();
     display.clrscr();
     display.updateInitMsg(routine.get_tLeft());
+    display.resetIdleMsg();
     sendOk(START_HEADER);
   }
   else

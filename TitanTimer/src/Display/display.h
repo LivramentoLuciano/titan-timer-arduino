@@ -47,6 +47,7 @@ public:
   void showNewInstanceMsg(String newInstanceMsg); // estas funciones no se si seria mejor tenerlas en p/ej 'methods' y q llamen a 'display.draw...' en lugar de tenerlas en 'display'
   void updateInitMsg(int t);
   void showIdleMsg(); // Muestra algo en tiempos muertos ?? 
+  void resetIdleMsg();
 };
 
 #endif

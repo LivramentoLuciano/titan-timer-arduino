@@ -4,6 +4,7 @@
 
 int i_sliderMsg = 0;
 bool doneSliderMsg = false;
+unsigned long t_doneIdleMsg = 0;
 
 void Display::init()
 {
@@ -83,11 +84,6 @@ void Display::updateInitMsg(int t)
 void Display::showIdleMsg()
 {
   writeStringSlider("TITAN ACADEMY", 2);
-  if (doneSliderMsg)
-  {
-    doneSliderMsg = false;
-    i_sliderMsg = 0;
-  }
 }
 
 // drawString() -> Imprime un mensaje
@@ -203,6 +199,13 @@ void Display::writeStringSlider(String text, uint8_t size)
   else
   {
     doneSliderMsg = true;
-    delay(2000);
+    t_doneIdleMsg = millis();
   }
+}
+
+void Display::resetIdleMsg()
+{
+  doneSliderMsg = false;
+  i_sliderMsg = 0;
+  // t_doneIdleMsg = 0;
 }

@@ -10,6 +10,8 @@ extern volatile bool newSecond;
 extern volatile int seconds;
 extern Bluetooth bluetooth;
 extern TimerState timerState;
+extern unsigned long t_doneIdleMsg;
+extern bool doneSliderMsg;
 
 void setup() { initTitan(); }
 
@@ -23,8 +25,18 @@ void loop()
   switch (routine.get_instance())
   {
   case NOTHING:
-    // if (timeout) // Cada X segundos muestro el msj, luego apago
-    display.showIdleMsg();
+    if (!doneSliderMsg) // muestra msj idle
+      display.showIdleMsg();
+    else if (millis() - t_doneIdleMsg > 10000) // al acabar, luego de 10s, vuelve a mostrar
+      display.resetIdleMsg();
+
+    // variante: con powerdown
+    // display.showIdleMsg();
+    // if(doneSliderMsg) 
+    // {
+    //    sleep(10segundos);
+    //    resetIdleMsg();  // al volver del sleep
+    // }
     break;
 
   case INIT:
