@@ -74,6 +74,14 @@ void Bluetooth::processCommand(char *cmd)
     handleRequestTimerState(_data);
     break;
 
+  case REPLAY_HEADER:
+    handleReplay(_data);
+    break;
+
+  case FORWARD_HEADER:
+    handleForward(_data);
+    break;
+
   default:
     break;
   }
@@ -214,6 +222,51 @@ void Bluetooth::handleRoundDown(char *_data)
 void Bluetooth::handleRequestTimerState(char *data)
 {
   sendTimerState();
+}
+
+void Bluetooth::handleReplay(char *_data)
+{
+  if (routine.enabled())
+  {
+    char *_strtokIndx = strtok(_data, ";");
+    int _deltaS = atoi(_strtokIndx); // 'deltaSeconds' recibido
+
+    // No puedo retroceder mas segundos que los actuales
+    if (_deltaS > routine.get_t())
+      _deltaS = routine.get_t();
+
+    if (routine.get_instance() == WORK)
+    { // En descansos, por ahora, omito secondsDown/Up o podria poner que sea siempre X
+      secondsDownTimer(_deltaS);
+      sendOk(REPLAY_HEADER);
+    }
+  }
+}
+
+void Bluetooth::handleForward(char *_data)
+{
+  if (routine.enabled())
+  {
+    char *_strtokIndx = strtok(_data, ";");
+    int _deltaS = atoi(_strtokIndx); // 'deltaSeconds' recibido
+
+    // No puedo avanzar mas segundos que los restantes
+    if (_deltaS > routine.get_tLeft())
+      _deltaS = routine.get_tLeft();
+
+    if (routine.get_instance() == WORK)
+    {
+      if (!((routine.isLastRound() && routine.isLastSet()) && _deltaS == routine.get_tLeft()))
+      {
+        secondsUpTimer(_deltaS);
+        sendOk(FORWARD_HEADER);
+      }
+      // Omito si estoy en el ultimo round del entrenamiento y el tiempo a avanzar es igual al restante 
+      // -> No finaliza el entrenamiento 
+      // Evito errores por apretar un "avanzar" de mas
+    }
+    // En descansos, por ahora, omito, podria back/forw un X cte por las dudas
+  }
 }
 
 // Responde Recibido Ok: {OK_HEADER; type}

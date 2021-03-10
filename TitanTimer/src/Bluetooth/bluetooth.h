@@ -42,6 +42,8 @@ public:
   void handleResume(char *data);
   void handleRoundUp(char *data);
   void handleRoundDown(char *data);
+  void handleReplay(char *data);
+  void handleForward(char *data);
   void handleRequestTimerState(char *data);
 };
 

@@ -18,5 +18,7 @@ void resetAndEnableTimer();
 void resetTimer();
 void pauseTimer();
 void resumeTimer();
+void secondsDownTimer(int dS);
+void secondsUpTimer(int dS);
 char timerStateChar();
 #endif
