@@ -1,4 +1,7 @@
 #include "Routine.h"
+#include "./../Alarm/alarm.h"
+
+extern Alarma alarmaLastSeconds;
 
 // Separo la carga de rutina de el 'start'
 void Routine:: set_settings(int _tWork, int _tRest, int _tRestSets, char _rounds, char _sets){
@@ -33,9 +36,15 @@ int Routine::get_tLeft()
     return 0;
 }
 
+bool Routine:: lastSeconds(){
+  return get_tLeft() <= 3;
+}
+
 void Routine::nextInstance()
 {
   t = 0;
+  alarmaLastSeconds.off();
+  
   if (instance == INIT)
     set_instance(WORK);
   else if (instance == WORK)

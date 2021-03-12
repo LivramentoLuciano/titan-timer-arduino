@@ -3,6 +3,7 @@
 #include "src/Display/display.h"
 #include "src/miTimer/miTimer.h"
 #include "src/Bluetooth/bluetooth.h"
+#include "src/Alarm/alarm.h"
 
 Routine routine = Routine();
 extern Display display;
@@ -12,6 +13,7 @@ extern Bluetooth bluetooth;
 extern TimerState timerState;
 extern unsigned long t_doneIdleMsg;
 extern bool doneSliderMsg;
+Alarma alarmaLastSeconds = Alarma();
 
 void setup() { initTitan(); }
 
@@ -32,7 +34,7 @@ void loop()
 
     // variante: con powerdown
     // display.showIdleMsg();
-    // if(doneSliderMsg) 
+    // if(doneSliderMsg)
     // {
     //    sleep(10segundos);
     //    resetIdleMsg();  // al volver del sleep
@@ -40,6 +42,9 @@ void loop()
     break;
 
   case INIT:
+    if (routine.lastSeconds())
+      alarmaLastSeconds.on();
+
     if (newSecond)
     {
       newSecond = false;
@@ -57,6 +62,8 @@ void loop()
     break;
 
   case WORK:
+    if (routine.lastSeconds())
+      alarmaLastSeconds.on();
     if (newSecond)
     {
       newSecond = false;
@@ -72,6 +79,8 @@ void loop()
     break;
 
   case REST:
+    if (routine.lastSeconds())
+      alarmaLastSeconds.on();
     if (newSecond)
     {
       newSecond = false;
@@ -87,6 +96,8 @@ void loop()
     break;
 
   case REST_SET:
+    if (routine.lastSeconds())
+      alarmaLastSeconds.on();
     if (newSecond)
     {
       newSecond = false;

@@ -70,6 +70,7 @@ public:
     int get_tLeft(); // en funcion de t y la duracion de instance -> no necesito que el atributo tLeft exista}
     bool isLastRound() { return actualRound == rounds; }
     bool isLastSet() { return actualSet == sets; }
+    bool lastSeconds();
     bool enabled();  // Omitir comandos entrantes (roundUp/Dwn, etc) si no esta en habilitado 
 };
 
