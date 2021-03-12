@@ -76,14 +76,16 @@ void Routine::nextInstance()
 }
 
 char* Routine:: get_instanceString(){
-  if (instance == WORK)
-    return "work";
-  else if (instance == REST)
-    return "prep";
-  else if (instance == REST_SET)
-    return "rest";
-  else if(instance == NOTHING)
-    return "";
+  if (instance == WORK){
+    if (mode == COMBATE) return "fight";
+    else return "work";
+  }
+  else if (instance == REST){
+    if (mode == COMBATE || mode == AMRAP) return "rest";
+    else return "prep"; // hiit/tabata descansos de transicion
+  } 
+  else if (instance == REST_SET) return "rest";
+  else if (instance == NOTHING) return "";
 }
 
 void Routine:: set_mode(String m){
