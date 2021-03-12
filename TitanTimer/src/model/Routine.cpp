@@ -4,7 +4,8 @@
 extern Alarma alarmaLastSeconds;
 
 // Separo la carga de rutina de el 'start'
-void Routine:: set_settings(int _tWork, int _tRest, int _tRestSets, char _rounds, char _sets){
+void Routine:: set_settings(String _mode, int _tWork, int _tRest, int _tRestSets, char _rounds, char _sets){
+  set_mode(_mode);
   tWork = _tWork;
   tRest = _tRest;
   tRestSets = _tRestSets;
@@ -83,6 +84,13 @@ char* Routine:: get_instanceString(){
     return "rest";
   else if(instance == NOTHING)
     return "";
+}
+
+void Routine:: set_mode(String m){
+  if (m == "amrap") mode = AMRAP;
+  else if (m == "hiit") mode = HIIT;
+  else if (m == "tabata") mode = TABATA;
+  else if (m = "combate") mode = COMBATE;
 }
 
 bool Routine:: enabled() {

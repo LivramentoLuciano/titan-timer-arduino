@@ -1,5 +1,6 @@
 #ifndef routine_h
 #define routine_h
+#include "Arduino.h"
 
 enum RoutineInstance
 {
@@ -11,12 +12,21 @@ enum RoutineInstance
     NOTHING
 };
 
+enum RoutineMode
+{
+    AMRAP,
+    HIIT,
+    TABATA,
+    COMBATE
+};
+
 class Routine
 {
 private:
     int tWork, tRest, tRestSets;
     char rounds, sets, actualRound, actualSet;
     RoutineInstance instance;
+    RoutineMode mode;
     int t;
     const int tInit = 3;
     bool isLoaded = false;
@@ -53,12 +63,14 @@ public:
     RoutineInstance get_instance() { return instance; }
     char *get_instanceString();
     void set_instance(RoutineInstance i) { instance = i; }
+    RoutineMode get_mode() { return mode; }
+    void set_mode(String m);
     int get_t() { return t; }
     void set_t(int _t) { t = _t; }
     bool get_isLoaded() { return isLoaded; } // si la rutina esta cargada (para evitar un Play sin rutina, ver q nunca lo borro que pasa si hago otras rutinas o repito a finalizar una)
 
     //
-    void set_settings(int _tWork, int _tRest, int _tRestSets, char _rounds, char _sets); // Carga rutina
+    void set_settings(String _mode, int _tWork, int _tRest, int _tRestSets, char _rounds, char _sets); // Carga rutina
     void init();                                                                         // start rutina
     void roundUp() { actualRound++; }                                                    /// No hago todo el chequeo para saber si avanzo o no de round, xq implica otras cosas como el timer en esa decision
     void roundDown() { actualRound--; }
@@ -71,7 +83,7 @@ public:
     bool isLastRound() { return actualRound == rounds; }
     bool isLastSet() { return actualSet == sets; }
     bool lastSeconds();
-    bool enabled();  // Omitir comandos entrantes (roundUp/Dwn, etc) si no esta en habilitado 
+    bool enabled(); // Omitir comandos entrantes (roundUp/Dwn, etc) si no esta en habilitado
 };
 
 #endif

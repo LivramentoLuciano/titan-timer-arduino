@@ -67,10 +67,37 @@ void Display::updateAll(int t, char r, char rt, char s, char st, String i)
   // ver si el hecho que c/u de estas tenga un 'screen.write()' tiene implicancias (como borrar cosas q no quiero borrar)
 }
 
-void Display::showNewInstanceMsg(String newInstanceMsg)
+// No me gusta haber agregado la dependencia al modelo, pero lo dejo asi por ahora
+void Display::showNewInstanceMsg(RoutineInstance instance, RoutineMode mode)
 {
+  String _msg = "";
+
+  switch (instance)
+  {
+  case WORK:
+    if (mode== COMBATE) _msg = "FIGHT";
+    else _msg = "WORK";
+    break;
+
+  case REST:
+    if (mode == COMBATE || mode == AMRAP) _msg = "REST";
+    else _msg = "PREP"; // Son descansos de transicion en hiit/tabata
+    break;
+
+  case REST_SET:
+    _msg = "REST";
+    break;
+  
+  case FINISHED:
+    _msg = "FIN!";
+    break;
+  
+  default:
+    break;
+  }
+
   clrscr();
-  drawStringCenterCenter(newInstanceMsg, 2);
+  drawStringCenterCenter(_msg, 2);
   screen.write();
 }
 

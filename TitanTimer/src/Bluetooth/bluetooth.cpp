@@ -110,7 +110,7 @@ void Bluetooth::handleLoadRoutine(char *_data)
   int _rounds = atoi(strtok(NULL, ";")); // resolver que sea un char y no un char*
   int _sets = atoi(strtok(NULL, ";"));
 
-  routine.set_settings(_tWork, _tRest, _tRestSets, (char)_rounds, (char)_sets);
+  routine.set_settings(_mode, _tWork, _tRest, _tRestSets, (char)_rounds, (char)_sets);
   resetTimer();
 
   sendOk(LOAD_ROUTINE_HEADER);

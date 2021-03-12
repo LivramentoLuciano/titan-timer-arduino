@@ -32,13 +32,6 @@ void loop()
     else if (millis() - t_doneIdleMsg > 10000) // al acabar, luego de 10s, vuelve a mostrar
       display.resetIdleMsg();
 
-    // variante: con powerdown
-    // display.showIdleMsg();
-    // if(doneSliderMsg)
-    // {
-    //    sleep(10segundos);
-    //    resetIdleMsg();  // al volver del sleep
-    // }
     break;
 
   case INIT:
@@ -55,9 +48,8 @@ void loop()
       {
         seconds = 0; // Cuando resuelva el problema de librerias al poner routine general en "definiciones.h", este 'seconds' se va (y el timer modifica directo routine.seconds++)
         routine.nextInstance();
-        display.showNewInstanceMsg("WORK!");
+        display.showNewInstanceMsg(routine.get_instance(), routine.get_mode()); // msj segun instancia y modo
       }
-      // display.updateTime(routine.get_tLeft()); // Ultimo, si pasa a nextInstance ya muestra el 't' y no '0'
     }
     break;
 
@@ -68,13 +60,14 @@ void loop()
     {
       newSecond = false;
       routine.set_t(seconds);
+      display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
 
       if (routine.get_tLeft() == 0)
       {
         seconds = 0;
         routine.nextInstance();
+        display.showNewInstanceMsg(routine.get_instance(), routine.get_mode());
       }
-      display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
     }
     break;
 
@@ -85,13 +78,14 @@ void loop()
     {
       newSecond = false;
       routine.set_t(seconds);
+      display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
 
       if (routine.get_tLeft() == 0)
       {
         seconds = 0;
         routine.nextInstance();
+        display.showNewInstanceMsg(routine.get_instance(), routine.get_mode());
       }
-      display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
     }
     break;
 
@@ -102,14 +96,15 @@ void loop()
     {
       newSecond = false;
       routine.set_t(seconds);
+      display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
 
       if (routine.get_tLeft() == 0)
       {
         seconds = 0;
         routine.nextInstance();
+        display.showNewInstanceMsg(routine.get_instance(), routine.get_mode());
       }
 
-      display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
     }
     break;
 
@@ -117,7 +112,7 @@ void loop()
     resetTimer();
     timerState = STOPPED;
     bluetooth.sendTimerState(); // finished
-    display.showNewInstanceMsg("FIN!");
+    display.showNewInstanceMsg(routine.get_instance(), routine.get_mode());
     delay(2000);
     display.clrscr();
     routine.set_instance(NOTHING);
