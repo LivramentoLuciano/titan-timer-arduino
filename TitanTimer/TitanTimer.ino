@@ -53,61 +53,6 @@ void loop()
     }
     break;
 
-  case WORK:
-    if (routine.lastSeconds())
-      alarmaLastSeconds.on();
-    if (newSecond)
-    {
-      newSecond = false;
-      routine.set_t(seconds);
-      display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
-
-      if (routine.get_tLeft() == 0)
-      {
-        seconds = 0;
-        routine.nextInstance();
-        display.showNewInstanceMsg(routine.get_instance(), routine.get_mode());
-      }
-    }
-    break;
-
-  case REST:
-    if (routine.lastSeconds())
-      alarmaLastSeconds.on();
-    if (newSecond)
-    {
-      newSecond = false;
-      routine.set_t(seconds);
-      display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
-
-      if (routine.get_tLeft() == 0)
-      {
-        seconds = 0;
-        routine.nextInstance();
-        display.showNewInstanceMsg(routine.get_instance(), routine.get_mode());
-      }
-    }
-    break;
-
-  case REST_SET:
-    if (routine.lastSeconds())
-      alarmaLastSeconds.on();
-    if (newSecond)
-    {
-      newSecond = false;
-      routine.set_t(seconds);
-      display.updateAll(routine.get_tLeft(), routine.get_actualRound(), routine.get_rounds(), routine.get_actualSet(), routine.get_sets(), routine.get_instanceString());
-
-      if (routine.get_tLeft() == 0)
-      {
-        seconds = 0;
-        routine.nextInstance();
-        display.showNewInstanceMsg(routine.get_instance(), routine.get_mode());
-      }
-
-    }
-    break;
-
   case FINISHED:
     resetTimer();
     timerState = STOPPED;
@@ -118,7 +63,34 @@ void loop()
     routine.set_instance(NOTHING);
     break;
 
-  default:
+  default: // WORK/REST/REST_SETS
+    if (routine.lastSeconds() && timerState == STARTED)
+      alarmaLastSeconds.on();
+    else alarmaLastSeconds.off();
+
+    if (newSecond)
+    {
+      newSecond = false;
+      routine.set_t(seconds);
+      // elimine 'updateAll' -> Evito parpadeo constante (hacia clrscr())
+      
+      if (routine.get_t() == 1) // En el primer segundo (parche)
+      {
+        display.clrscr(); // borro NewInstanceMsg
+        display.updateInstance(routine.get_instanceString());
+        display.updateRound(routine.get_actualRound(), routine.get_rounds());
+        display.updateSet(routine.get_actualSet(), routine.get_sets());
+      }
+
+      display.updateTime(routine.get_tLeft());  // va dsp por el 'clrscr' del 1er seg
+
+      if (routine.get_tLeft() == 0) // Instancia finalizada
+      {
+        seconds = 0;
+        routine.nextInstance();
+        display.showNewInstanceMsg(routine.get_instance(), routine.get_mode());
+      }
+    }
     break;
   }
 }
