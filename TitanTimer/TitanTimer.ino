@@ -35,8 +35,9 @@ void loop()
     break;
 
   case INIT:
-    if (routine.lastSeconds())
+    if (routine.lastSeconds() && timerState == STARTED) // No se encienda si esta en pausa
       alarmaLastSeconds.on();
+    else alarmaLastSeconds.off(); // Por si justo pauso cuando sonaba -> La apago
 
     if (newSecond)
     {
@@ -54,8 +55,10 @@ void loop()
     break;
 
   case WORK:
-    if (routine.lastSeconds())
+    if (routine.lastSeconds() && timerState == STARTED)
       alarmaLastSeconds.on();
+    else alarmaLastSeconds.off();
+    
     if (newSecond)
     {
       newSecond = false;
@@ -72,8 +75,10 @@ void loop()
     break;
 
   case REST:
-    if (routine.lastSeconds())
+    if (routine.lastSeconds() && timerState == STARTED)
       alarmaLastSeconds.on();
+    else alarmaLastSeconds.off();
+
     if (newSecond)
     {
       newSecond = false;
@@ -90,8 +95,10 @@ void loop()
     break;
 
   case REST_SET:
-    if (routine.lastSeconds())
+    if (routine.lastSeconds() && timerState == STARTED)
       alarmaLastSeconds.on();
+    else alarmaLastSeconds.off();
+
     if (newSecond)
     {
       newSecond = false;
