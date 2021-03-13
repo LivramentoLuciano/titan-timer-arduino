@@ -22,6 +22,10 @@ void Alarma::on(AlarmMode _mode)
   }
 }
 
+void Alarma:: onCont(){
+  buzzerOn();
+}
+
 void Alarma::off()
 {
   buzzerOff();

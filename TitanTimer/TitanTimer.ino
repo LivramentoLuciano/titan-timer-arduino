@@ -66,10 +66,11 @@ void loop()
     break;
 
   default: // WORK/REST/REST_SETS
-    if (routine.lastSeconds() && timerState == STARTED) // No se encienda si esta en pausa
-      alarmaLastSeconds.on(routine.get_alarmMode());
+    if (routine.lastSeconds() && timerState == STARTED)         // No se enciende si esta en pausa
+      if (routine.get_tLeft() == 1) alarmaLastSeconds.onCont(); // ultimo segundo, beep continuo
+      else alarmaLastSeconds.on(routine.get_alarmMode());       // beeps intermitentes
     else
-      alarmaLastSeconds.off();  // Por si justo pauso cuando sonaba -> La apago
+      alarmaLastSeconds.off();                                  // Por si justo pauso cuando sonaba -> La apago
 
     if (newSecond)
     {

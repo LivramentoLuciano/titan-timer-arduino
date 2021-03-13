@@ -23,7 +23,8 @@ private:
 
 public:
     Alarma();
-    void on(AlarmMode mode);
+    void on(AlarmMode mode);    // Beeps intermitentes (variables)
+    void onCont();              // Beep continuo
     void off();
 };
 

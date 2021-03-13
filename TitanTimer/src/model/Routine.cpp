@@ -36,12 +36,12 @@ int Routine::get_tLeft()
     return 0;
 }
 
-// Combate/Amrap -> Faltando 10 segundos, 1 solo seg (beeps cortos)
+// Combate/Amrap -> Faltando 10 segundos, solo un seg (beeps cortos) o cuando falte 1 seg, beep continuo
 // Resto -> Durante los ultimos 3 segundos
 bool Routine:: lastSeconds()
 {
   if (instance == INIT) return get_tLeft() <= LAST_SECONDS_NORMAL;
-  if (mode == COMBATE || mode == AMRAP) return get_tLeft() == LAST_SECONDS_XL;
+  if (mode == COMBATE || mode == AMRAP) return get_tLeft() == LAST_SECONDS_XL || get_tLeft() == 1;
   else if (mode == HIIT || mode == TABATA) return get_tLeft() <= LAST_SECONDS_NORMAL;
 }
 

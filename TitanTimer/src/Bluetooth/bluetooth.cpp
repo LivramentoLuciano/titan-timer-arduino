@@ -157,7 +157,7 @@ void Bluetooth::handleResume(char *_data)
 
 void Bluetooth::handleRoundUp(char *_data)
 {
-  if (routine.enabled())
+  if (routine.enabled() && !(routine.get_instance() == INIT)) // No lo meto en 'enabled' para que 'pause/resume' anden
   {
     if (routine.isLastRound())
     {
@@ -188,7 +188,7 @@ void Bluetooth::handleRoundUp(char *_data)
 
 void Bluetooth::handleRoundDown(char *_data)
 {
-  if (routine.enabled())
+  if (routine.enabled() && !(routine.get_instance() == INIT))
   {
     if (routine.get_actualRound() > 1)
     {
@@ -226,7 +226,7 @@ void Bluetooth::handleRequestTimerState(char *data)
 
 void Bluetooth::handleReplay(char *_data)
 {
-  if (routine.enabled())
+  if (routine.enabled() && !(routine.get_instance() == INIT))
   {
     char *_strtokIndx = strtok(_data, ";");
     int _deltaS = atoi(_strtokIndx); // 'deltaSeconds' recibido
@@ -245,7 +245,7 @@ void Bluetooth::handleReplay(char *_data)
 
 void Bluetooth::handleForward(char *_data)
 {
-  if (routine.enabled())
+  if (routine.enabled() && !(routine.get_instance() == INIT))
   {
     char *_strtokIndx = strtok(_data, ";");
     int _deltaS = atoi(_strtokIndx); // 'deltaSeconds' recibido
