@@ -35,9 +35,10 @@ void loop()
     break;
 
   case INIT:
-    if (routine.lastSeconds() && timerState == STARTED) // No se encienda si esta en pausa
-      alarmaLastSeconds.on();
-    else alarmaLastSeconds.off(); // Por si justo pauso cuando sonaba -> La apago
+    if (routine.lastSeconds() && timerState == STARTED)
+      alarmaLastSeconds.on(ALARM_NORMAL);
+    else
+      alarmaLastSeconds.off();
 
     if (newSecond)
     {
@@ -65,16 +66,17 @@ void loop()
     break;
 
   default: // WORK/REST/REST_SETS
-    if (routine.lastSeconds() && timerState == STARTED)
-      alarmaLastSeconds.on();
-    else alarmaLastSeconds.off();
+    if (routine.lastSeconds() && timerState == STARTED) // No se encienda si esta en pausa
+      alarmaLastSeconds.on(routine.get_alarmMode());
+    else
+      alarmaLastSeconds.off();  // Por si justo pauso cuando sonaba -> La apago
 
     if (newSecond)
     {
       newSecond = false;
       routine.set_t(seconds);
       // elimine 'updateAll' -> Evito parpadeo constante (hacia clrscr())
-      
+
       if (routine.get_t() == 1) // En el primer segundo (parche)
       {
         display.clrscr(); // borro NewInstanceMsg
@@ -83,7 +85,7 @@ void loop()
         display.updateSet(routine.get_actualSet(), routine.get_sets());
       }
 
-      display.updateTime(routine.get_tLeft());  // va dsp por el 'clrscr' del 1er seg
+      display.updateTime(routine.get_tLeft()); // va dsp por el 'clrscr' del 1er seg
 
       if (routine.get_tLeft() == 0) // Instancia finalizada
       {

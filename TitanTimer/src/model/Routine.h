@@ -1,6 +1,7 @@
 #ifndef routine_h
 #define routine_h
 #include "Arduino.h"
+#include "./../Alarm/alarm.h"
 
 enum RoutineInstance
 {
@@ -30,6 +31,8 @@ private:
     int t;
     const int tInit = 3;
     bool isLoaded = false;
+    const char LAST_SECONDS_NORMAL = 3;
+    const char LAST_SECONDS_XL = 10;
 
 public:
     // constructor -> No lo uso (Ver notas) -> Uso en cambio '.init()'
@@ -84,6 +87,7 @@ public:
     bool isLastSet() { return actualSet == sets; }
     bool lastSeconds();
     bool enabled(); // Omitir comandos entrantes (roundUp/Dwn, etc) si no esta en habilitado
+    AlarmMode get_alarmMode();
 };
 
 #endif

@@ -8,9 +8,13 @@ Alarma:: Alarma(){
   buzzerOff();
 }
 
-void Alarma::on()
+// distinto beep (y lastSeconds) segun modo
+void Alarma::on(AlarmMode _mode)
 {
-  if (millis() > tToogleBeep + BEEP_INTERVAL)
+  int _beepIntv = BEEP_INTERVAL_NORMAL;
+  if (_mode == ALARM_SHORT) _beepIntv = BEEP_INTERVAL_SHORT;
+
+  if (millis() > tToogleBeep + _beepIntv)
   { // toogle 'Beep'
     if (isBuzzerOn) buzzerOff();
     else buzzerOn();

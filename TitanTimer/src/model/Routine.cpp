@@ -1,5 +1,4 @@
 #include "Routine.h"
-#include "./../Alarm/alarm.h"
 
 extern Alarma alarmaLastSeconds;
 
@@ -37,8 +36,13 @@ int Routine::get_tLeft()
     return 0;
 }
 
-bool Routine:: lastSeconds(){
-  return get_tLeft() <= 3;
+// Combate/Amrap -> Faltando 10 segundos, 1 solo seg (beeps cortos)
+// Resto -> Durante los ultimos 3 segundos
+bool Routine:: lastSeconds()
+{
+  if (instance == INIT) return get_tLeft() <= LAST_SECONDS_NORMAL;
+  if (mode == COMBATE || mode == AMRAP) return get_tLeft() == LAST_SECONDS_XL;
+  else if (mode == HIIT || mode == TABATA) return get_tLeft() <= LAST_SECONDS_NORMAL;
 }
 
 void Routine::nextInstance()
@@ -97,4 +101,9 @@ void Routine:: set_mode(String m){
 
 bool Routine:: enabled() {
   return isLoaded && (instance != NOTHING) && (instance != FINISHED);
+}
+
+AlarmMode Routine:: get_alarmMode(){
+  if (mode == AMRAP || mode == COMBATE) return ALARM_SHORT;
+  else return ALARM_NORMAL;
 }
