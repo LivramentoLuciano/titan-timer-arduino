@@ -39,14 +39,17 @@ void Display::updateTime(int t)
 
 void Display::updateRound(char r, char rt)
 {
-  drawStringTopRight(String(r, DEC) + "/" + String(rt, DEC), 1, 1);
+  drawStringTopRight(String(r, DEC) + "/" + String(rt, DEC), 1);
   screen.write();
 }
 
 void Display::updateSet(char s, char st)
 {
-  drawStringBottomRight(String(s, DEC) + "/" + String(st, DEC), 1, 1);
-  screen.write();
+  if (st > 1)
+  { // Parche (si tiene 1 solo set, no muestro esta info)
+    drawStringBottomRight(String(s, DEC) + "/" + String(st, DEC), 1);
+    screen.write();
+  }  
 }
 
 void Display::updateInstance(String instance)

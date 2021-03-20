@@ -83,7 +83,7 @@ void loop()
         display.clrscr(); // borro NewInstanceMsg
         display.updateInstance(routine.get_instanceString());
         display.updateRound(routine.get_actualRound(), routine.get_rounds());
-        display.updateSet(routine.get_actualSet(), routine.get_sets());
+        display.updateSet(routine.get_actualSet(), routine.get_sets()); // Parche filtrado COMB y AMRAP direct en updateSet
       }
 
       display.updateTime(routine.get_tLeft()); // va dsp por el 'clrscr' del 1er seg
