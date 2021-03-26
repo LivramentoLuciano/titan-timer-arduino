@@ -1,6 +1,7 @@
 {
     "sketch": "TitanTimer\\TitanTimer.ino",
-    "board": "arduino:avr:uno",
-    "port": "COM3",
-    "programmer": "AVRISP mkII"
+    "board": "arduino:avr:pro",
+    "port": "COM11",
+    "programmer": "AVRISP mkII",
+    "configuration": "cpu=16MHzatmega328"
 }

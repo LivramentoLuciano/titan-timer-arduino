@@ -15,8 +15,8 @@ void Display::init()
       // position <0,0> es topLeft y yo tengo mis display arrancando en <topBottom>
       // por eso _vDisplays - 1 - fila (sino seria 'fila' solo)
       // fila * _hDisplays -> En fila: 1, col:0, arranque en el display n:_hDisplays
-      screen.setPosition(fila * _hDisplays + col, col, _vDisplays - 1 - fila);
-      screen.setRotation(fila * _hDisplays + col, 1);
+      screen.setPosition(fila * _hDisplays + col, _hDisplays - 1 - col, fila);
+      screen.setRotation(fila * _hDisplays + col, 3); // 270 grados
     }
 
   clrscr();
@@ -39,7 +39,7 @@ void Display::updateTime(int t)
 
 void Display::updateRound(char r, char rt)
 {
-  drawStringTopRight(String(r, DEC) + "/" + String(rt, DEC), 1);
+  drawStringBottomRight(String(r, DEC) + "/" + String(rt, DEC), 1);
   screen.write();
 }
 
@@ -47,7 +47,7 @@ void Display::updateSet(char s, char st)
 {
   if (st > 1)
   { // Parche (si tiene 1 solo set, no muestro esta info)
-    drawStringBottomRight(String(s, DEC) + "/" + String(st, DEC), 1);
+    drawStringTopRight(String(s, DEC) + "/" + String(st, DEC), 1);
     screen.write();
   }  
 }

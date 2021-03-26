@@ -8,15 +8,21 @@
                 "D:\\Arduino\\tools\\**",
                 "D:\\Arduino\\hardware\\tools\\**",
                 "D:\\Arduino\\libraries\\**",
+                "C:\\Users\\usuario\\Documents\\Arduino\\libraries\\**",
                 "C:\\Users\\livra\\OneDrive\\Documentos\\Arduino\\libraries\\**",
-                "C:\\Users\\livra\\OneDrive\\Documentos\\Arduino\\hardware\\tools\\**"
-                
+                "C:\\Users\\livra\\OneDrive\\Documentos\\Arduino\\hardware\\tools\\**",
+                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\**",
+                "C:\\Program Files (x86)\\Arduino\\tools\\**",
+                "C:\\Program Files (x86)\\Arduino\\libraries\\**"
             ],
             "forcedInclude": [
-                "D:\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
+                // "D:\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h",
+                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
             ],
             "intelliSenseMode": "msvc-x64",
-            "defines": ["USBCON"]
+            "defines": [
+                "USBCON"
+            ]
         }
     ],
     "version": 4
