@@ -19,8 +19,6 @@ Imágenes de exterior e interior del cronómetro terminado:
 
 Video del cronómetro funcionando:
 
-<video width="400" height="300" controls>
-  <source src="mvp_media/Cronometro_andando.mp4" type="video/mp4">
-</video>
+https://user-images.githubusercontent.com/27143242/159977682-c1bdcbd5-05d6-4538-8ad3-901cf56b60dd.mp4
 
 
